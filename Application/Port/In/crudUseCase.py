@@ -15,12 +15,19 @@ class CrudUserCase:
         user=self.authRepository.get_by_id(userID)
         return user
 
-    # def updateUser(self, userID: int, username: str, email: str) -> User:
-    #     user = self.authRepository.get_by_id(userID)
-    #     if not user:
-    #         return None
-    #     user.username = username
-    #     user.email = email
-    #     return self.authRepository.update(user)
-    # def deleteUser(self, userID: int) -> None:
-    #     self.authRepository.delete(userID)
+    def updateUsername(self, userID: int, username: str) -> User:
+        user = self.authRepository.get_by_id(userID)
+        if not user:
+            return None
+        user.username = username
+        return self.authRepository.update_username(user)
+    
+    def updatePassword(self, userID: int, password: str) -> User:
+        user = self.authRepository.get_by_id(userID)
+        if not user:
+            return None
+        user.password = password
+        return self.authRepository.update_password(user)
+    
+    def deleteUser(self, userID: int) -> None:
+        self.authRepository.delete(userID)

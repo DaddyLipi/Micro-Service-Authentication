@@ -57,12 +57,25 @@ class AuthRepository:
         return None
     
 
-    def update(self, user: User) -> User:
+    def update_username(self, user: User) -> User:
         connection = self.__connectToDB__()
-
+        print(user)
         cursor = connection.cursor()
-        update_query = "UPDATE users SET username = %s, password = %s WHERE userID = %s"
-        values = (user.userID,user.username, user.password)
+        update_query = "UPDATE users SET username = %s WHERE userID = %s"
+        values = (user.username, user.userID)
+        cursor.execute(update_query, values)
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return user
+    
+    def update_password(self, user: User) -> User:
+        connection = self.__connectToDB__()
+        print(user)
+        cursor = connection.cursor()
+        hashed_password = generate_password_hash(user.password)
+        update_query = "UPDATE users SET password = %s WHERE userID = %s"
+        values = (hashed_password, user.userID)
         cursor.execute(update_query, values)
         connection.commit()
         cursor.close()
@@ -70,7 +83,6 @@ class AuthRepository:
         return user
     
     def delete(self, userID: int) -> None:
-        print("llega")
         print(type(userID))
         connection = self.__connectToDB__()
         cursor = connection.cursor()
